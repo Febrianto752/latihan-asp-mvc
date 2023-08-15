@@ -1,0 +1,33 @@
+﻿@model BookStore.Models.Author;
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Details Author";
+}
+
+<div class="card">
+    <h5 class="card-header">Details Author</h5>
+    <div class="card-body">
+        <h5 class="card-title">Name : @(Model.Name)</h5>
+        <p class="card-text">Age : @(Model.Age)</p>
+        
+        <h6>Books created by author :</h6>
+        <div>
+            @if(Model.Books.Count == 0)
+            {
+                <p>Data is empty!</p>
+            }
+            else{
+                <ul class="list-group">
+                    @foreach (var book in Model.Books)
+                    {
+                        <li class="list-group-item">@(book.Title)</li>
+                    }
+                </ul>                
+            }
+            
+        </div>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-info btn-sm my-4">&laquo; Back to list</a>

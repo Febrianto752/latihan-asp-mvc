@@ -1,0 +1,63 @@
+﻿@model IdentityApp.Models.Dtos.RegistrationDto;
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Registration";
+}
+
+@if(TempData["Success"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>@TempData["Success"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>@TempData["Error"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h1>Registration Page</h1>
+
+<div class="card" style="width: 20rem;">
+    <div class="card-body">
+        <h5 class="card-title mb-5">Form Login</h5>
+
+        <form asp-action="Registration" method="post">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Name">Name</label>
+                <input class="form-control" asp-for="Name">
+                <span class="text-danger" asp-validation-for="Name"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Username">Username</label>
+                <input class="form-control" asp-for="Username">
+                <span class="text-danger" asp-validation-for="Username"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Email">Email</label>
+                <input class="form-control" asp-for="Email">
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Password">Password</label>
+                <input type="text" class="form-control" asp-for="Password">
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" asp-for="PasswordConfirm">PasswordConfirm</label>
+                <input class="form-control" asp-for="PasswordConfirm">
+                <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        </form>
+
+        <a asp-action="Login">Have account? Login</a>
+    </div>
+</div>

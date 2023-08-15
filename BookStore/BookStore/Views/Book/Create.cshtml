@@ -1,0 +1,51 @@
+﻿@model BookStore.Models.Book; 
+@using Newtonsoft.Json;
+@{
+    var authors = ViewData["authors"] as ICollection<BookStore.Models.Author>;
+    Layout = "_Layout";
+    ViewData["Title"] = "Create Book";
+    Console.WriteLine(ViewData["authors"]);
+}
+
+<h1 class="mb-5">Create Book Form</h1>
+@Html.ValidationMessage("CustomError")
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label  class="form-label" asp-for="Title">Title</label>
+        <input class="form-control" asp-for="Title">
+        <span class="text-danger" asp-validation-for="Title"></span>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" asp-for="AuthorGuid">Author</label>
+        <select class="form-select" asp-for="AuthorGuid">
+            @foreach (var author in authors)
+            {
+                <option value="@(author.Guid)">@(author.Name)</option>
+            }
+        </select>
+        <span class="text-danger" asp-validation-for="AuthorGuid"></span>
+    </div>
+    
+
+    <div class="mb-3">
+        <label class="form-label" asp-for="Quota">Quota</label>
+        <input class="form-control" asp-for="Quota">
+        <span class="text-danger" asp-validation-for="Quota"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" asp-for="Price">Price</label>
+        <input type="number" class="form-control" asp-for="Price">
+        <span class="text-danger" asp-validation-for="Price"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+
+
+@section Scripts{
+    <script>
+        console.log(@Html.Raw(JsonConvert.SerializeObject(ViewData["authors"])));
+    </script>
+}

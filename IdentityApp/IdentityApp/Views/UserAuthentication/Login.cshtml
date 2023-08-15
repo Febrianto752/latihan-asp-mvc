@@ -1,0 +1,70 @@
+﻿@model IdentityApp.Models.Dtos.LoginDto;
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "login";
+    var expired = Context.Request.Cookies["expired"];
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>@TempData["Success"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>@TempData["Error"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (expired == "true")
+{
+    <script>
+
+        alert("Your session has expired. Please log in again.");
+
+    </script>
+}
+
+<h1>Login Page</h1>
+
+<div class="card" style="width: 20rem;">
+  <div class="card-body">
+    <h5 class="card-title mb-5">Form Login</h5>
+
+        <form asp-action="Login" method="post">
+            <div class="mb-3">
+                <label class="form-label" asp-for="Username">Username</label>
+                <input class="form-control" asp-for="Username">
+                <span class="text-danger" asp-validation-for="Username"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Password">Password</label>
+                <input type="text" class="form-control" asp-for="Password">
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <a asp-action="Registration">Not a user!, sign up!</a>
+  </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        // Function to remove a cookie by setting its expiration to the past
+        function removeCookie(name) {
+            document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
+        // Call the function to remove a cookie named "MyCookie"
+        removeCookie("expired");
+    </script>
+}

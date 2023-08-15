@@ -1,0 +1,62 @@
+﻿@model BookStore.Dtos.Auth.SignInDto;
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "SignIn";
+    var expired = Context.Request.Cookies["expired"];
+
+    Console.WriteLine(expired);    
+}
+
+
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <p>@TempData["Error"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (expired == "true")
+{
+    <script>
+        
+            alert("Your session has expired. Please log in again.");
+        
+    </script>
+}
+
+<h1>Halaman SignIn</h1>
+
+<div class="card" >
+  <div class="card-body">
+        <form asp-action="SignIn" method="post">
+            <div class="mb-3">
+                <label  class="form-label" asp-for="Email">Email</label>
+                <input type="text" class="form-control" asp-for="Email">
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" asp-for="Password">Password</label>
+                <input type="password" class="form-control" asp-for="Password">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+  </div>
+</div>
+
+
+@section Scripts {
+    <script>
+    // Function to remove a cookie by setting its expiration to the past
+        function removeCookie(name) {
+        document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
+
+        // Call the function to remove a cookie named "MyCookie"
+        removeCookie("expired");
+    </script>
+}

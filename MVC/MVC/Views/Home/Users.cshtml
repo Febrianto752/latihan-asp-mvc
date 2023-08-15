@@ -1,0 +1,140 @@
+﻿@model MVC.DTOs.UserDto;
+
+<h1>User page</h1>
+
+
+<h2>Table Hobbies</h2>
+<form asp-controller="Home" asp-action="Users" method="post" id="form">
+    <table id="table">
+        <thead>
+        <th>No</th>
+        <th>Hobby</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td><input type="radio" value="sport-1" asp-for="Hobbies[0]">sport 1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><input type="radio" value="sport-2" asp-for="Hobbies[1]">sport 2</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><input type="radio" value="sport-3" asp-for="Hobbies[2]">sport 3</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><input type="radio" value="sport " asp-for="Hobbies[3]">sport 4</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><input type="radio" value="sport " asp-for="Hobbies[4]">sport 5</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td><input type="radio" value="sport " asp-for="Hobbies[5]">sport 6</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td><input type="radio" value="sport " asp-for="Hobbies[6]">sport 7</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td><input type="radio" value="sport 8" asp-for="Hobbies[7]">sport 8</td>
+            </tr>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td><input type="radio" value="sport " asp-for="Hobbies[8]">sport 7</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td><input type="radio" value="sport 8" asp-for="Hobbies[9]">sport 8</td>
+            </tr>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td><input type="radio" value="sport " asp-for="Hobbies[10]">sport 7</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td><input type="radio" value="sport 8" asp-for="Hobbies[11]">sport 8</td>
+            </tr>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td><input type="radio" value="sport " asp-for="Hobbies[12]">sport 7</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td><input type="radio" value="sport 8" asp-for="Hobbies[13]">sport 8</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        const table = $('#table').DataTable({});
+
+        $('.btn').on('click', function (e) {
+            e.preventDefault();
+
+            var data = table.$('input, radio').serialize();
+            console.log(data);
+            
+
+            // Decode the URL-encoded string
+            const decodedUrl = decodeURIComponent(data);
+
+            // Parse the query string into a JavaScript object
+            const urlParams = new URLSearchParams(decodedUrl);
+            const hobbiesObject = {};
+
+            console.log(urlParams);
+            const arrays = [];
+            for (const [key, value] of urlParams) {
+                const matches = key.match(/Hobbies\[(\d+)\]/);
+                console.log(matches);
+                if (matches) {
+                    arrays.push(value);
+                }
+            }
+
+            console.log(arrays);
+
+            const users = {
+                Name: "febri",
+                Hobbies: arrays
+            };
+
+            console.log(users);
+            console.log(JSON.stringify(users));
+
+            $.ajax({
+                url: "/Home/Users",
+                type: "POST", 
+                data: JSON.stringify(users),
+                contentType: "application/json",
+                success: function (response) {
+                     console.log("berhasil");
+                    console.log(response);
+                },
+                error: function (xhr, status, error) {
+                    console.log("gagal");
+                    console.error(error);
+                }
+            });
+            
+        });
+
+        
+    })
+
+
+
+</script>

@@ -1,0 +1,4 @@
+spek : 
+1. crud
+2. pagination, filter
+3. auth without identity auth

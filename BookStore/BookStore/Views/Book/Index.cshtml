@@ -1,0 +1,126 @@
+﻿@model ICollection<Book>
+@using Microsoft.Extensions.Primitives;
+
+@{
+    var authors = ViewData["authors"] as List<string>;
+    var titleQuery = Context.Request.Query["title"];
+    var authorQuery = Context.Request.Query["author"];
+
+    var pageQuery = Context.Request.Query["page"];
+    var page = 1;
+
+    if (!StringValues.IsNullOrEmpty(pageQuery))
+    {
+        page = int.Parse(pageQuery);
+    }
+
+    
+
+    
+    var pages = (int)ViewData["pages"];
+    ViewData["Title"] = "Book List";
+    Layout = "_Layout";
+
+    var i = (page - 1) * pages + 1;
+}
+
+@if(TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p class="p-0">@TempData["Success"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}else if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <p class="p-0">@TempData["Error"]</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<h1 class="text-center">Book List</h1>
+
+<a asp-controller="Book" asp-action="Create" class="btn btn-outline-success mb-4">Create</a>
+
+<form asp-action="Index" method="get">
+    <select class="form-select w-25 mb-3" name="author" id="author-filter">
+        <option value="all" selected>All</option>
+        @foreach(var author in authors)
+        {
+            <option value="@author">@author</option>           
+        }       
+    </select>
+
+    <input type="text" name="title" class="form-control w-25 mb-3" value="@titleQuery" placeholder="Search Title..." />
+
+    <button type="submit" class="btn btn-secondary btn-sm">Filter</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Title</th>
+            <th scope="col">Author</th>
+            <th scope="col">Quota</th>
+            <th scope="col">Price</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th scope="col">Action</th>               
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var book in Model)
+        {
+            <tr>
+                <th scope="row">@(i++)</th>
+                <td>@(book.Title)</td>
+                <td>@(book.Author?.Name)</td>
+                <td>@(book.Quota)</td>
+                <td>@(book.Price)</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a asp-action="Details" asp-route-guid="@(book.Guid)" class="btn btn-outline-secondary btn-sm">Details</a>
+                        <a asp-action="Edit" asp-route-guid="@(book.Guid)" class="btn btn-outline-warning btn-sm">Edit</a>
+
+                        <form asp-action="Delete" method="post" class="d-inline-block">
+                            <input type="hidden" name="guid" value="@book.Guid" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure want to deleted it?')">Delete</button>
+                        </form>
+
+                    </td>
+                }
+                
+            </tr>
+        }       
+    </tbody>
+</table>
+
+<nav aria-label="...">
+    <ul class="pagination">
+        <li class="page-item @(page <= 1 ? "disabled" : "")">
+            <a asp-action="Index" asp-route-page="@(page - 1)" class="page-link">Previous</a>
+        </li>
+        @for (var j = 1; j <= pages; j++)
+        {
+            <li class="page-item @(page == j ? "active" : "")"><a class="page-link" asp-action="Index" asp-route-page="@(j)">@(j)</a></li>
+        }
+        <li class="page-item @(page >= pages ? "disabled" : "")">
+            <a class="page-link" asp-action="Index" asp-route-page="@(page + 1)">Next</a>
+        </li>
+    </ul>
+</nav>
+
+
+
+
+@section Scripts{
+    <script>
+        $("#author-filter").val("@(StringValues.IsNullOrEmpty(authorQuery) ? "all" : authorQuery)")
+
+        console.log("mulai")
+        
+    </script>
+}

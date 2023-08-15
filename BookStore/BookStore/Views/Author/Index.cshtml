@@ -1,0 +1,53 @@
+﻿@model ICollection<BookStore.Models.Author>;
+@using Newtonsoft.Json;
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Author List";
+
+    var i = 1;
+}
+
+
+<h1 class="text-center">Author List</h1>
+
+<a asp-controller="Author" asp-action="Create" class="btn btn-outline-success">Create</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">No</th>
+            <th scope="col">Name</th>
+            <th scope="col">Age</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var author in Model)
+        {
+            <tr>
+                <th scope="row">@(i++)</th>
+                <td>@(author.Name)</td>
+                <td>@(author.Age)</td>
+                <td>
+                    <a asp-action="Details" asp-route-guid="@(author.Guid)" class="btn btn-outline-secondary btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-guid="@(author.Guid)" class="btn btn-outline-warning btn-sm">Edit</a>
+
+                    <form asp-action="Delete" method="post" class="d-inline-block">
+                        <input type="hidden" name="guid" value="@author.Guid" />
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Are you sure want to deleted it?')">Delete</button>
+                    </form>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+@section Scripts{
+    <script>
+        console.log(@Html.Raw(JsonConvert.SerializeObject(Model)));
+    </script>
+}
